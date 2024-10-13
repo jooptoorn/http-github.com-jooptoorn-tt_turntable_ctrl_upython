@@ -42,7 +42,7 @@ def startup():
     # construct DemoBoard
     # either pass an appropriate RPMode, e.g. RPMode.ASIC_RP_CONTROL
     # or have "mode = ASIC_RP_CONTROL" in ini DEFAULT section
-    ttdemoboard = DemoBoard()
+    ttdemoboard = DemoBoard(RPMode.ASIC_MANUAL_INPUTS)
     print("\n\n")
     print(f"The '{colors.color('tt', 'red')}' object is available.")
     print()
@@ -115,6 +115,7 @@ if PowerOnSelfTest.first_boot():
 # is instantiated
 run_post_tests = PowerOnSelfTest.dotest_buttons_held()
 # or get a dict with PowerOnSelfTest.read_all_pins()
+run_post_tests = False
 
 
 tt = startup()
@@ -137,6 +138,27 @@ if run_post_tests:
         tt.load_default_project()
     print('\n\n')
 
-#tt.shuttle.tt_um_psychogenic_neptuneproportional.enable()
 print(tt)
 print()
+
+# Enable pulldowns on input pins that control switching of the track
+# polarity to avoid erroneous switching
+tt.mode = RPMode.ASIC_MANUAL_INPUTS
+tt.in0.pull = Pins.PULL_DOWN
+tt.in1.pull = Pins.PULL_DOWN
+tt.in2.pull = Pins.PULL_DOWN
+tt.in3.pull = Pins.PULL_DOWN
+tt.in4.pull = Pins.PULL_DOWN
+tt.in5.pull = Pins.PULL_DOWN
+tt.in6.pull = Pins.PULL_DOWN
+tt.in7.pull = Pins.PULL_DOWN
+tt.uio1.pull = Pins.PULL_DOWN
+tt.uio2.pull = Pins.PULL_DOWN
+tt.uio3.pull = Pins.PULL_DOWN
+tt.uio4.pull = Pins.PULL_DOWN
+# same for error pin that disables the outputs
+tt.uio0.pull = Pins.PULL_DOWN
+
+# now set the clock pin to RP controlled at set frequency
+tt.project_clk.mode = Pins.OUT
+tt.project_clk.pwm(10)

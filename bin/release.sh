@@ -42,7 +42,7 @@ fi
 # check and test source dir
 if [ "x$SRCDIR" == "x" ]
 then
-	SRCDIR=./src
+	SRCDIR=../src
 fi
 
 if [ -d $SRCDIR ]
@@ -75,8 +75,8 @@ done
 
 
 echo "Generating UF2"
-OUTFILE=/tmp/tt-demo-rp2040-$VERSION.uf2
-python -m uf2utils.examples.custom_pico --fs_root $BUILDDIR --upython $RPUF2 --out $OUTFILE
+OUTFILE=$PWD/tt-demo-rp2040-$VERSION.uf2
+python3 -m uf2utils.examples.custom_pico --fs_root $BUILDDIR --upython $RPUF2 --out $OUTFILE
 echo
 uf2info $OUTFILE
 
