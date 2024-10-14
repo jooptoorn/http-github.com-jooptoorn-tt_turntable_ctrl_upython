@@ -42,6 +42,7 @@ def startup():
     # construct DemoBoard
     # either pass an appropriate RPMode, e.g. RPMode.ASIC_RP_CONTROL
     # or have "mode = ASIC_RP_CONTROL" in ini DEFAULT section
+    # bug: it doesn't work to define mode in control and not pass an argument here (crashes somewhere in init of the mux)
     ttdemoboard = DemoBoard(RPMode.ASIC_MANUAL_INPUTS)
     print("\n\n")
     print(f"The '{colors.color('tt', 'red')}' object is available.")
@@ -141,9 +142,11 @@ if run_post_tests:
 print(tt)
 print()
 
+# This is already done by default, but assume nothing just in case..
+tt.mode = RPMode.ASIC_MANUAL_INPUTS
+
 # Enable pulldowns on input pins that control switching of the track
 # polarity to avoid erroneous switching
-tt.mode = RPMode.ASIC_MANUAL_INPUTS
 tt.in0.pull = Pins.PULL_DOWN
 tt.in1.pull = Pins.PULL_DOWN
 tt.in2.pull = Pins.PULL_DOWN
@@ -161,4 +164,4 @@ tt.uio0.pull = Pins.PULL_DOWN
 
 # now set the clock pin to RP controlled at set frequency
 tt.project_clk.mode = Pins.OUT
-tt.project_clk.pwm(10)
+tt.project_clk.pwm(500)
